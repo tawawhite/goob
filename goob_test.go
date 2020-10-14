@@ -67,10 +67,14 @@ func TestClosed(t *testing.T) {
 	checkLeak(t)
 
 	ob := goob.New()
+	ob.Subscribe()
 	ob.Close()
 
 	s := ob.Subscribe()
 	_, ok := <-s
+
+	ob.Publish(1)
+	ob.Unsubscribe(s)
 
 	eq(t, ok, false)
 	eq(t, ob.Len(), 0)
